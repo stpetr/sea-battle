@@ -4,6 +4,7 @@
   "description": "Sea Battle game",
   "main": "server/index.js",
   "scripts": {
+    "client-dev": "webpack-dev-server",
     "server-dev": "env-cmd -f ./server/config/dev.env nodemon ./server/index.js"
   },
   "author": "Petr Dvukhrechensky",
@@ -11,11 +12,36 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "history": "^5.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.28",
+    "normalize.css": "^8.0.1",
+    "react": "^16.13.1",
+    "react-addons-shallow-compare": "^15.6.2",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.1",
+    "react-router-dom": "^5.2.0",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
-    "env-cmd": "^10.1.0"
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^4.2.1",
+    "dotenv": "^8.2.0",
+    "env-cmd": "^10.1.0",
+    "less-loader": "^6.2.0",
+    "mini-css-extract-plugin": "^0.9.0",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   }
 }
