@@ -5,6 +5,7 @@ import configureStore from './store/configureStore'
 import AppRouter from './routers/AppRouter'
 
 import 'normalize.css/normalize.css'
+import './styles/main.less'
 
 const store = configureStore()
 
