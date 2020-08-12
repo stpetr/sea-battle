@@ -107,6 +107,6 @@ dist
 .idea
 
 # App files
-config/*
-!config/example.env
+server/config/*
+!server/config/example.env
 .env.development

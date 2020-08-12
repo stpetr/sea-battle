@@ -4,7 +4,7 @@
   "description": "Sea Battle game",
   "main": "server/index.js",
   "scripts": {
-    "server-dev": "env-cmd -f ./config/dev.env nodemon ./server/index.js"
+    "server-dev": "env-cmd -f ./server/config/dev.env nodemon ./server/index.js"
   },
   "author": "Petr Dvukhrechensky",
   "license": "ISC",
