@@ -54,13 +54,13 @@ module.exports = (env, argv) => {
                 publicPath: path.join(__dirname, 'public', 'dist'),
             }),
             new webpack.DefinePlugin({
-                'process.env.API_URL': JSON.stringify(process.env.API_URL),
+                'process.env.SERVER_URL': JSON.stringify(process.env.SERVER_URL),
             })
         ],
         devtool: isProduction ? 'source-map' : 'inline-source-map',
         devServer: {
             contentBase: path.join(__dirname, 'public'),
-            port: process.env.SERVER_PORT || 3000,
+            port: process.env.DEV_SERVER_PORT || 3000,
             historyApiFallback: true,
             publicPath: '/dist/'
         }
