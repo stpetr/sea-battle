@@ -20,13 +20,9 @@ export const logout = () => ({
 })
 
 export const beginAuthenticate = () => (dispatch) => {
-    makeApiRequest('user/check-auth', {
+    return  makeApiRequest('user/check-auth', {
         method: 'POST',
-    }, dispatch).then((data) => {
-        if (data && data.user) {
-            dispatch(authenticate(data.user))
-        }
-    })
+    }, dispatch)
 }
 
 export const beginLogin = (email, password) => (dispatch) => {

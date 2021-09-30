@@ -9,8 +9,8 @@ export const Header = () => (
     <header className="header">
         <div className="content-container">
             <div className="header__content">
-                <NavLink className="header__link" to="/" exact={true} {...activeClass}>
-                    Home
+                <NavLink className="header__link" to="/dashboard" {...activeClass}>
+                    Dashboard
                 </NavLink>
             </div>
         </div>

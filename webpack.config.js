@@ -54,6 +54,7 @@ module.exports = (env, argv) => {
                 publicPath: path.join(__dirname, 'public', 'dist'),
             }),
             new webpack.DefinePlugin({
+                'process.env.CLIENT_URL': JSON.stringify(process.env.CLIENT_URL),
                 'process.env.SERVER_URL': JSON.stringify(process.env.SERVER_URL),
             })
         ],

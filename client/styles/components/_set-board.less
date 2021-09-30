@@ -1,0 +1,53 @@
+.set-board {
+  display: flex;
+
+  .available-ships {
+    margin-left: 40px;
+
+    .ship {
+      display: flex;
+      margin-bottom: 20px;
+
+      &.-vertical {
+        flex-direction: column;
+
+        .ship__cell {
+          margin-bottom: 4px;
+        }
+      }
+
+      .ship__cell {
+        display: flex;
+        width: 40px;
+        height: 40px;
+        margin-right: 4px;
+        border: 1px solid #cccccc;
+      }
+    }
+  }
+
+  .ships {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    &.-inactive {
+      z-index: -1;
+    }
+
+    .ship {
+      display: flex;
+      margin-bottom: 20px;
+
+      .ship__cell {
+        display: flex;
+        width: 40px;
+        height: 40px;
+        margin-right: 4px;
+        border: 1px solid #cccccc;
+      }
+    }
+  }
+}

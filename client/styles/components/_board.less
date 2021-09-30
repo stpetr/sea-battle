@@ -1,0 +1,61 @@
+.board-wrap {
+  position: relative;
+}
+
+.board {
+  // width: 800px;
+  // height: 800px;
+
+  &.ship-is-dragged {
+    td {
+      .ship-cell {
+        &:not(.dragged-ship) {
+          pointer-events: none;
+        }
+      }
+    }
+  }
+
+  tr {
+    td {
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      border: 1px solid #cccccc;
+
+      &.highlighted {
+        background-color: #cccccc;
+
+        &.-available {
+          background-color: darkseagreen;
+        }
+
+        &.-taken {
+          background-color: indianred;
+        }
+      }
+
+      .ship-cell {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        background-color: sandybrown;
+        color: white;
+
+        &.is-wounded {
+          background-color: palevioletred;
+        }
+
+        &.is-killed {
+          background-color: darkred;
+        }
+
+        &.is-missed {
+          background-color: #ccc;
+        }
+      }
+    }
+  }
+}
