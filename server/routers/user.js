@@ -10,7 +10,8 @@ router.post('/api/user/check-auth', auth, async (req, res) => {
 
 router.post('/api/user/login', async  (req, res) => {
     try {
-        const user = await User.findByCredentials(req.body.email, req.body.password)
+        const { email, password } = req.body
+        const user = await User.findByCredentials(email, password)
         const token = await user.generateAuthToken()
 
         res.send({ user, token })

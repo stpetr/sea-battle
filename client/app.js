@@ -13,19 +13,19 @@ import './styles/main.less'
 const store = configureStore()
 const rootElement = document.getElementById('app')
 const tpl = (
-    <Provider store={store}>
-        <AppRouter />
-    </Provider>
+  <Provider store={store}>
+    <AppRouter/>
+  </Provider>
 )
 
-ReactDom.render(<Loader />, rootElement)
+ReactDom.render(<Loader/>, rootElement)
 
 // Check if user has valid token in local storage
 store.dispatch(beginAuthenticate()).then((data) => {
-    if (data && data.user) {
-        store.dispatch(authenticate(data.user))
-        sockets.connect()
-    }
+  if (data && data.user) {
+    store.dispatch(authenticate(data.user))
+    sockets.connect()
+  }
 
-    ReactDom.render(tpl, rootElement)
+  ReactDom.render(tpl, rootElement)
 })

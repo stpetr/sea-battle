@@ -6,25 +6,26 @@ export class RandomGamePage extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-
-    }
+    this.state = {}
   }
+
   componentDidMount() {
     sockets.on('randomGameReady', (game) => {
       console.log('randomGameReady', game)
-      this.props.history.push(`/games/private/${game._id}`)
+      this.props.history.push(`/game/${game._id}`)
     })
 
     makeApiRequest('random-game/check-in', { method: 'POST' }).then((data) => {
       console.log('Checked in for a random game', data)
     })
   }
+
   componentWillUnmount() {
     makeApiRequest('random-game/check-out', { method: 'POST' }).then((data) => {
       console.log('Checked out from random game', data)
     })
   }
+
   render() {
     return (
       <div className="page page__random-game">

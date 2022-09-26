@@ -1,28 +1,28 @@
 import {
-    FETCH_GAMES,
-    CREATE_PRIVATE_GAME,
+  FETCH_GAMES,
+  CREATE_PRIVATE_GAME,
 } from '../actions/games'
 
 const defaultState = []
 
 export default (state = defaultState, action) => {
-    switch (action.type) {
-        case FETCH_GAMES:
-            console.log('FETCH GAMES', action)
-            if (Array.isArray(action.games)) {
-                return [
-                    ...state,
-                    ...action.games
-                ]
-            }
+  switch (action.type) {
+    case FETCH_GAMES:
+      console.log('FETCH GAMES', action)
+      if (Array.isArray(action.games)) {
+        return [
+          ...state,
+          ...action.games,
+        ]
+      }
 
-            return state
-        case CREATE_PRIVATE_GAME:
-            return [
-                ...state,
-                action.game
-            ]
-        default:
-            return state
-    }
+      return state
+    case CREATE_PRIVATE_GAME:
+      return [
+        ...state,
+        action.game,
+      ]
+    default:
+      return state
+  }
 }

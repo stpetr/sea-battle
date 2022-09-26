@@ -7,13 +7,13 @@ import gameReducer from '../reducers/game'
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 export default () => {
-    const store = createStore(combineReducers({
-            auth: authReducer,
-            games: gamesReducer,
-            game: gameReducer,
-        }),
-        composeEnhancers(applyMiddleware(thunk))
-    )
+  const store = createStore(combineReducers({
+      auth: authReducer,
+      games: gamesReducer,
+      game: gameReducer,
+    }),
+    composeEnhancers(applyMiddleware(thunk)),
+  )
 
-    return store
+  return store
 }

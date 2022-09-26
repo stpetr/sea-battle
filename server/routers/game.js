@@ -105,6 +105,23 @@ router.post('/api/game/:id/make-shot', auth, async (req, res) => {
     res.send(gameData)
 })
 
+router.post('/api/game/:id/request-revanche', auth, async (req, res) => {
+    const game = await Game.findById(req.params.id)
+
+    if (!game) {
+        return res.status(404).send()
+    }
+
+    if (game.status !== Game.GAME_STATUS_FINISHED) {
+        return res.status(400).send()
+    }
+
+    const gameData = await Game.prepareGameData(game, req.user)
+    sockets.notifyUser(gameData.opponent._id, 'requestRevanche', Date.now())
+
+    res.send()
+})
+
 router.post('/api/game/:id/leave', auth, async (req, res) => {
     const game = await Game.findById(req.params.id)
 

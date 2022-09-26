@@ -1,0 +1,47 @@
+.game {
+  display: flex;
+
+  .game__board {
+    margin-right: 40px;
+  }
+}
+
+.game-over {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 500px;
+  margin: 0 auto;
+
+  .game-over__heading {
+    margin-bottom: 10px;
+    font-size: 40px;
+    text-align: center;
+  }
+
+  .game-over__result {
+    margin-bottom: 20px;
+    font-size: 32px;
+    font-weight: 600;
+    text-align: center;
+
+    &.game-over__result--won {
+      color: @mainBlue;
+    }
+
+    &.game-over__result--lost {
+      color: darkred;
+    }
+  }
+
+  .game-over__buttons {
+    display: flex;
+    justify-content: center;
+
+    .btn {
+      margin-right: 10px;
+      color: white;
+    }
+  }
+}
