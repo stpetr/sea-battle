@@ -54,7 +54,7 @@ export class Board extends React.Component {
                         }}
                       >
                         {this.props.board[rowIndex][colIndex] &&
-                        <span className={`ship-cell is-${this.props.board[rowIndex][colIndex]}`}>&nbsp;</span>
+                          <span className={`ship-cell is-${this.props.board[rowIndex][colIndex]}`}>&nbsp;</span>
                         }
                       </td>
                     )

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const {
-    SHIP_ORIENTATION_HORIZONTAL,
-    SHIP_ORIENTATION_VERTICAL
+  SHIP_ORIENTATION_HORIZONTAL,
+  SHIP_ORIENTATION_VERTICAL,
 } = require('../../common/helpers/game-mechanics')
 
 const MODEL_NAME = 'Ship'
@@ -17,31 +17,31 @@ const MODEL_NAME = 'Ship'
 // }
 
 const shipSchema = new mongoose.Schema({
-    userId: {
-        type: mongoose.Types.ObjectId,
-        required: true,
-    },
-    row: {
-        type: Number,
-        required: true,
-    },
-    col: {
-        type: Number,
-        required: true,
-    },
-    width: {
-        type: Number,
-        required: true,
-    },
-    length: {
-        type: Number,
-        required: true,
-    },
-    orientation: {
-        type: String,
-        required: true,
-        enum: [SHIP_ORIENTATION_HORIZONTAL, SHIP_ORIENTATION_VERTICAL]
-    }
+  userId: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+  },
+  row: {
+    type: Number,
+    required: true,
+  },
+  col: {
+    type: Number,
+    required: true,
+  },
+  width: {
+    type: Number,
+    required: true,
+  },
+  length: {
+    type: Number,
+    required: true,
+  },
+  orientation: {
+    type: String,
+    required: true,
+    enum: [SHIP_ORIENTATION_HORIZONTAL, SHIP_ORIENTATION_VERTICAL],
+  },
 })
 
 // shipSchema.statics.getAvailableShips = () => ([

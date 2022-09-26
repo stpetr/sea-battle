@@ -39,7 +39,7 @@ export class RegisterPage extends React.Component {
       <div className="page page__register container auth-page">
         <h1 className="page__heading">Register</h1>
         {this.state.hasErrors &&
-        <p className="form-error">Failed to register, please check your input</p>
+          <p className="form-error">Failed to register, please check your input</p>
         }
         <form onSubmit={this.onSubmit}>
           <div className="form-group">

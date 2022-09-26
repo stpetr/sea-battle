@@ -45,7 +45,7 @@ export const DashboardPage = () => {
           <div className="private-game-created">
             Send this link to your friend and start playing:
             <div className="form-group">
-              <input className="form-control" type="text" value={privateGameLink} readOnly />
+              <input className="form-control" type="text" value={privateGameLink} readOnly/>
             </div>
 
             <div className="d-flex">

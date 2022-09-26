@@ -18,12 +18,12 @@ export class Ship extends React.Component {
   render() {
     return (
       <div className={`ship -${this.props.ship.orientation}`}
-           draggable={this.props.draggable}
-           onDragStart={this.props.handleDragStart}
-           onDragEnd={this.props.handleDragEnd}
-           onTouchStart={this.props.handleDragStart}
-           onTouchEnd={this.props.handleDragEnd}
-           onClick={this.props.handleClick}
+        draggable={this.props.draggable}
+        onDragStart={this.props.handleDragStart}
+        onDragEnd={this.props.handleDragEnd}
+        onTouchStart={this.props.handleDragStart}
+        onTouchEnd={this.props.handleDragEnd}
+        onClick={this.props.handleClick}
       >
         {
           this.getShipCells(this.props.ship).map((cell, cellIndex) => (

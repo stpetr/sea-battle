@@ -25,11 +25,11 @@ app.use(gameRouter)
 app.use(gameStackRouter)
 
 app.get('/api/*', (req, res) => {
-    res.status(404).send()
+  res.status(404).send()
 })
 
 app.get('*', (req, res, next) => {
-    res.sendFile(path.join(publicDirectoryPath, 'index.html'))
+  res.sendFile(path.join(publicDirectoryPath, 'index.html'))
 })
 
 sockets.init(io)
@@ -37,30 +37,29 @@ sockets.init(io)
 // const socketConnections = {}
 //
 // io.use((socket, next) => {
-//     if (socket.handshake.query && socket.handshake.query.token) {
-//         jwt.verify(socket.handshake.query.token, process.env.JWT_SECRET, (err, decoded) => {
-//             if (err) {
-//                 return next(new Error('Authentication error'))
-//             }
+//   if (socket.handshake.query && socket.handshake.query.token) {
+//     jwt.verify(socket.handshake.query.token, process.env.JWT_SECRET, (err, decoded) => {
+//       if (err) {
+//         return next(new Error('Authentication error'))
+//       }
 //
-//             socketConnections[socket.id] = decoded._id
-//             next()
-//         })
-//     } else {
-//         next(new Error('Authentication error'))
-//     }
-// }).on('connect', (socket) => {
-//     console.log('somebody has connected', socketConnections[socket.id], ', connections number:', Object.keys(socketConnections).length)
-//     socket.join(socketConnections[socket.id])
-//
-//
-//
-//     socket.on('disconnect', () => {
-//         delete socketConnections[socket.id]
-//         console.log('somebody has disconnected,', 'connections number:', Object.keys(socketConnections).length)
+//       socketConnections[socket.id] = decoded._id
+//       next()
 //     })
+//   } else {
+//     next(new Error('Authentication error'))
+//   }
+// }).on('connect', (socket) => {
+//   console.log('somebody has connected', socketConnections[socket.id], ', connections number:', Object.keys(socketConnections).length)
+//   socket.join(socketConnections[socket.id])
+//
+//
+//   socket.on('disconnect', () => {
+//     delete socketConnections[socket.id]
+//     console.log('somebody has disconnected,', 'connections number:', Object.keys(socketConnections).length)
+//   })
 // })
 
 httpServer.listen(PORT, () => {
-    console.log('Server is up on port', PORT)
+  console.log('Server is up on port', PORT)
 })

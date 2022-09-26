@@ -21,7 +21,7 @@ const shipSchema = {
   orientation: {
     type: String,
     required: true,
-    enum: [SHIP_ORIENTATION_HORIZONTAL, SHIP_ORIENTATION_VERTICAL]
+    enum: [SHIP_ORIENTATION_HORIZONTAL, SHIP_ORIENTATION_VERTICAL],
   },
   row: {
     type: Number,

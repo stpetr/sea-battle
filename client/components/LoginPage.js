@@ -40,7 +40,7 @@ export class LoginPage extends React.Component {
       <div className="page auth-page container">
         <h1 className="page__heading">Login</h1>
         {this.state.hasErrors &&
-        <p className="form-error">Failed to login, please check your input</p>
+          <p className="form-error">Failed to login, please check your input</p>
         }
         <form onSubmit={this.onSubmit}>
           <div className="form-group">

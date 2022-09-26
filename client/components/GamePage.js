@@ -157,7 +157,7 @@ const mapDispatchToProps = (dispatch) => ({
   beginSetShips: (gameId, ships) => dispatch(beginSetShips(gameId, ships)),
   beginMakeShot: (gameId, shot) => dispatch(beginMakeShot(gameId, shot)),
   setGameData: (game) => dispatch(setGameData(game)),
-  beginRequestRevanche: (gameId) => dispatch(beginRequestRevanche(gameId))
+  beginRequestRevanche: (gameId) => dispatch(beginRequestRevanche(gameId)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(GamePage)

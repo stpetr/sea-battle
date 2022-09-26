@@ -19,201 +19,201 @@ const WINNER_AWARD = 100
 const PARTICIPATE_AWARD = 10
 
 const createAvailableShip = (width, length, qty, orientation = SHIP_ORIENTATION_HORIZONTAL) => ({
-    width,
-    length,
-    qty,
-    orientation
+  width,
+  length,
+  qty,
+  orientation,
 })
 
 const getAvailableShips = () => [
-    createAvailableShip(1, 4, 1),
-    createAvailableShip(1, 3, 2),
-    createAvailableShip(1, 2, 3),
-    createAvailableShip(1, 1, 4),
+  createAvailableShip(1, 4, 1),
+  createAvailableShip(1, 3, 2),
+  createAvailableShip(1, 2, 3),
+  createAvailableShip(1, 1, 4),
 ]
 
 const isCoordsValid = (row, col) => row >= 0 && row < BATTLEFIELD_SIZE && col >= 0 && col < BATTLEFIELD_SIZE
 
 const getBoard = () => {
-    const board = []
+  const board = []
 
-    for (let row = 0; row < BATTLEFIELD_SIZE; row++) {
-        for (let col = 0; col < BATTLEFIELD_SIZE; col++) {
-            if (!Array.isArray(board[row])) {
-                board[row] = []
-            }
+  for (let row = 0; row < BATTLEFIELD_SIZE; row++) {
+    for (let col = 0; col < BATTLEFIELD_SIZE; col++) {
+      if (!Array.isArray(board[row])) {
+        board[row] = []
+      }
 
-            board[row][col] = 0
-        }
+      board[row][col] = 0
     }
+  }
 
-    return board
+  return board
 }
 
 const printBoard = (board) => {
-    console.log('---')
-    board.forEach((row) => console.log(row.join(', ')))
-    console.log('---')
+  console.log('---')
+  board.forEach((row) => console.log(row.join(', ')))
+  console.log('---')
 }
 
 const getShipCellsCoords = (ship) => {
-    const coords = []
+  const coords = []
 
-    for (let i = 0; i < ship.length; i++) {
-        let row = ship.row,
-            col = ship.col
-        if (ship.orientation === SHIP_ORIENTATION_HORIZONTAL) {
-            col += i
-        } else {
-            row += i
-        }
-
-        coords.push({
-            row,
-            col
-        })
+  for (let i = 0; i < ship.length; i++) {
+    let row = ship.row,
+      col = ship.col
+    if (ship.orientation === SHIP_ORIENTATION_HORIZONTAL) {
+      col += i
+    } else {
+      row += i
     }
 
-    return coords
+    coords.push({
+      row,
+      col,
+    })
+  }
+
+  return coords
 }
 
 const isCellTaken = (board, row, col) => {
-    // Need to check the given cell and all cells around it
-    const coordsAdd = [
-        [-1, -1],
-        [-1, 0],
-        [-1, 1],
-        [0, -1],
-        [0, 0],
-        [0, 1],
-        [1, -1],
-        [1, 0],
-        [1, 1],
-    ]
+  // Need to check the given cell and all cells around it
+  const coordsAdd = [
+    [-1, -1],
+    [-1, 0],
+    [-1, 1],
+    [0, -1],
+    [0, 0],
+    [0, 1],
+    [1, -1],
+    [1, 0],
+    [1, 1],
+  ]
 
-    for (let i = 0; i < coordsAdd.length; i++) {
-        const checkRow = row + coordsAdd[i][0],
-            checkCol = col + coordsAdd[i][1]
+  for (let i = 0; i < coordsAdd.length; i++) {
+    const checkRow = row + coordsAdd[i][0],
+      checkCol = col + coordsAdd[i][1]
 
-        if (!isCoordsValid(checkRow, checkCol)) {
-            continue
-        }
-
-        // @todo Remove the magic number
-        if (board[checkRow][checkCol] === 1) {
-            return true
-        }
+    if (!isCoordsValid(checkRow, checkCol)) {
+      continue
     }
 
-    return false
+    // @todo Remove the magic number
+    if (board[checkRow][checkCol] === 1) {
+      return true
+    }
+  }
+
+  return false
 }
 
 const validateShipsContent = (ships) => {
-    const availableShips = getAvailableShips()
-    availableShips.forEach((ship) => ship.set = 0)
+  const availableShips = getAvailableShips()
+  availableShips.forEach((ship) => ship.set = 0)
 
-    for (let i = 0; i < ships.length; i++) {
-        let ship = availableShips.find((availableShip) => ships[i].width === availableShip.width && ships[i].length === availableShip.length)
-        if (!ship) {
-            return false
-        }
-
-        ship.set++
+  for (let i = 0; i < ships.length; i++) {
+    let ship = availableShips.find((availableShip) => ships[i].width === availableShip.width && ships[i].length === availableShip.length)
+    if (!ship) {
+      return false
     }
 
-    for (let i = 0; i < availableShips.length; i++) {
-        if (availableShips[i].qty !== availableShips[i].set) {
-            return false
-        }
-    }
+    ship.set++
+  }
 
-    return true
+  for (let i = 0; i < availableShips.length; i++) {
+    if (availableShips[i].qty !== availableShips[i].set) {
+      return false
+    }
+  }
+
+  return true
 }
 
 const validateShipsCoords = (ships) => {
-    const board = getBoard()
+  const board = getBoard()
 
-    for (let i = 0; i < ships.length; i++) {
-        let ship = ships[i]
-        let shipCells = getShipCellsCoords(ship)
+  for (let i = 0; i < ships.length; i++) {
+    let ship = ships[i]
+    let shipCells = getShipCellsCoords(ship)
 
-        for (let j = 0; j < shipCells.length; j++) {
-            let shipCell = shipCells[j]
-            if (!isCoordsValid(shipCell.row, shipCell.col)) {
-                return false
-            }
+    for (let j = 0; j < shipCells.length; j++) {
+      let shipCell = shipCells[j]
+      if (!isCoordsValid(shipCell.row, shipCell.col)) {
+        return false
+      }
 
-            if (isCellTaken(board, shipCell.row, shipCell.col)) {
-                return false
-            }
-        }
-
-        // If we're here it means that the ship is valid and can be put on board
-        for (let j = 0; j < shipCells.length; j++) {
-            const shipCell = shipCells[j]
-            // @todo Remove the magic number
-            board[shipCell.row][shipCell.col] = 1
-        }
+      if (isCellTaken(board, shipCell.row, shipCell.col)) {
+        return false
+      }
     }
 
-    return true
+    // If we're here it means that the ship is valid and can be put on board
+    for (let j = 0; j < shipCells.length; j++) {
+      const shipCell = shipCells[j]
+      // @todo Remove the magic number
+      board[shipCell.row][shipCell.col] = 1
+    }
+  }
+
+  return true
 }
 
 const validateShips = (ships) => {
-    if (!Array.isArray(ships)) {
-        return false
-    }
+  if (!Array.isArray(ships)) {
+    return false
+  }
 
-    return validateShipsContent(ships) && validateShipsCoords(ships)
+  return validateShipsContent(ships) && validateShipsCoords(ships)
 }
 
 const putShipsOnBoard = (board, ships) => {
-    ships.forEach((ship) => {
-        getShipCellsCoords(ship).forEach(({ row, col }) => {
-            // @todo Remove the magic number
-            board[row][col] = 1
-        })
+  ships.forEach((ship) => {
+    getShipCellsCoords(ship).forEach(({ row, col }) => {
+      // @todo Remove the magic number
+      board[row][col] = 1
     })
+  })
 
-    return board
+  return board
 }
 
 const getShipByCoords = (ships, row, col) => {
-    // return ships.find((ship) => getShipCellsCoords(ship).filter(({ row: cellRow, col: cellCol }) => row === cellRow && col === cellCol))
-    for (let i = 0; i < ships.length; i++) {
-        let ship = ships[i]
-        let shipCells = getShipCellsCoords(ship)
-        for (let j = 0; j < shipCells.length; j++) {
-            let shipCell = shipCells[j]
-            if (shipCell.row === row && shipCell.col === col) {
-                return ship
-            }
-        }
+  // return ships.find((ship) => getShipCellsCoords(ship).filter(({ row: cellRow, col: cellCol }) => row === cellRow && col === cellCol))
+  for (let i = 0; i < ships.length; i++) {
+    let ship = ships[i]
+    let shipCells = getShipCellsCoords(ship)
+    for (let j = 0; j < shipCells.length; j++) {
+      let shipCell = shipCells[j]
+      if (shipCell.row === row && shipCell.col === col) {
+        return ship
+      }
     }
+  }
 
-    return null
+  return null
 }
 
 module.exports = {
-    BATTLEFIELD_SIZE,
-    PLAYERS_NUMBER,
-    GAME_TYPE_PRIVATE,
-    GAME_TYPE_RANDOM,
-    GAME_STATUS_JOIN,
-    GAME_STATUS_SET,
-    GAME_STATUS_PLAY,
-    GAME_STATUS_FINISHED,
-    SHIP,
-    SHIP_ORIENTATION_HORIZONTAL,
-    SHIP_ORIENTATION_VERTICAL,
-    SHOT_RESULT_KILLED,
-    SHOT_RESULT_MISSED,
-    SHOT_RESULT_WOUNDED,
-    isCoordsValid,
-    isCellTaken,
-    getShipByCoords,
-    getShipCellsCoords,
-    getAvailableShips,
-    validateShips,
-    putShipsOnBoard,
+  BATTLEFIELD_SIZE,
+  PLAYERS_NUMBER,
+  GAME_TYPE_PRIVATE,
+  GAME_TYPE_RANDOM,
+  GAME_STATUS_JOIN,
+  GAME_STATUS_SET,
+  GAME_STATUS_PLAY,
+  GAME_STATUS_FINISHED,
+  SHIP,
+  SHIP_ORIENTATION_HORIZONTAL,
+  SHIP_ORIENTATION_VERTICAL,
+  SHOT_RESULT_KILLED,
+  SHOT_RESULT_MISSED,
+  SHOT_RESULT_WOUNDED,
+  isCoordsValid,
+  isCellTaken,
+  getShipByCoords,
+  getShipCellsCoords,
+  getAvailableShips,
+  validateShips,
+  putShipsOnBoard,
 }

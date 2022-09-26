@@ -322,9 +322,9 @@ export class SetBoard extends React.Component {
         <div className="set-board">
           <div className="board-wrap">
             <table className={`board` + (this.state.draggedShip ? ` ship-is-dragged` : ``)}
-                   onDragEnter={(e) => this.onShipDragEnter(e)}
-                   onDragOver={(e) => this.onShipDragOver(e)}
-                   onDrop={(e) => this.onShipDrop(e)}
+              onDragEnter={(e) => this.onShipDragEnter(e)}
+              onDragOver={(e) => this.onShipDragOver(e)}
+              onDrop={(e) => this.onShipDrop(e)}
             >
               <tbody>
               {
@@ -344,12 +344,12 @@ export class SetBoard extends React.Component {
                             }}
                           >
                             {ship &&
-                            <span className="ship-cell"
-                                  draggable="true"
-                                  onDragStart={(e) => this.onShipDragStart(e, ship)}
-                                  onDragEnd={(e) => this.onShipDragEnd(e, ship)}
-                                  onClick={(e) => this.toggleShipOrientation(e, ship)}
-                            >&nbsp;</span>
+                              <span className="ship-cell"
+                                draggable="true"
+                                onDragStart={(e) => this.onShipDragStart(e, ship)}
+                                onDragEnd={(e) => this.onShipDragEnd(e, ship)}
+                                onClick={(e) => this.toggleShipOrientation(e, ship)}
+                              >&nbsp;</span>
                             }
                           </td>
                         )
@@ -368,11 +368,11 @@ export class SetBoard extends React.Component {
                   return (
                     ship.qty > 0 &&
                     <Ship key={`ship-${ship.width}-${ship.length}`}
-                          ship={ship}
-                          draggable="true"
-                          handleDragStart={(e) => this.onShipDragStart(e, ship)}
-                          handleDragEnd={(e) => this.onShipDragEnd(e, ship)}
-                          handleClick={(e) => this.toggleShipOrientation(e, ship)}
+                      ship={ship}
+                      draggable="true"
+                      handleDragStart={(e) => this.onShipDragStart(e, ship)}
+                      handleDragEnd={(e) => this.onShipDragEnd(e, ship)}
+                      handleClick={(e) => this.toggleShipOrientation(e, ship)}
                     />
                   )
                 })
@@ -385,7 +385,8 @@ export class SetBoard extends React.Component {
             className="btn btn-main"
             disabled={this.getAvailableShipsQty() > 0}
             onClick={() => this.props.setShips(this.state.ships)}
-          >Save</button>
+          >Save
+          </button>
         </div>
       </div>
     )
