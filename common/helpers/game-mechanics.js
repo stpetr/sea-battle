@@ -18,11 +18,18 @@ const SHIP = 'ship'
 const WINNER_AWARD = 100
 const PARTICIPATE_AWARD = 10
 
+let shipId = 0
+
+const getNewShipId = () => ++shipId
+
 const createAvailableShip = (width, length, qty, orientation = SHIP_ORIENTATION_HORIZONTAL) => ({
+  availableShipId: getNewShipId(),
   width,
   length,
   qty,
   orientation,
+  row: null,
+  col: null,
 })
 
 const getAvailableShips = () => [
@@ -43,7 +50,7 @@ const getBoard = () => {
         board[row] = []
       }
 
-      board[row][col] = 0
+      board[row][col] = null
     }
   }
 
@@ -77,9 +84,9 @@ const getShipCellsCoords = (ship) => {
   return coords
 }
 
-const isCellTaken = (board, row, col) => {
+const isCellTaken = (ships, row, col, excludeShip = null) => {
   // Need to check the given cell and all cells around it
-  const coordsAdd = [
+  const coordsToCheck = [
     [-1, -1],
     [-1, 0],
     [-1, 1],
@@ -91,17 +98,19 @@ const isCellTaken = (board, row, col) => {
     [1, 1],
   ]
 
-  for (let i = 0; i < coordsAdd.length; i++) {
-    const checkRow = row + coordsAdd[i][0],
-      checkCol = col + coordsAdd[i][1]
+  for (let i = 0; i < coordsToCheck.length; i++) {
+    const checkRow = row + coordsToCheck[i][0],
+      checkCol = col + coordsToCheck[i][1],
+      shipByCoords = getShipByCoords(ships, checkRow, checkCol)
 
     if (!isCoordsValid(checkRow, checkCol)) {
       continue
     }
 
-    // @todo Remove the magic number
-    if (board[checkRow][checkCol] === 1) {
-      return true
+    if (shipByCoords) {
+      if (!excludeShip || excludeShip.id !== shipByCoords.id) {
+        return true
+      }
     }
   }
 
@@ -194,6 +203,19 @@ const getShipByCoords = (ships, row, col) => {
   return null
 }
 
+const canPutShipAtCoords = (ships, ship, row, col) => {
+  const shipCellsCoords = getShipCellsCoords({ ...ship, row, col })
+
+  for (let i = 0; i < shipCellsCoords.length; i++) {
+    let cellCoords = shipCellsCoords[i]
+    if (!isCoordsValid(cellCoords.row, cellCoords.col) || isCellTaken(ships, cellCoords.row, cellCoords.col, ship)) {
+      return false
+    }
+  }
+
+  return true
+}
+
 module.exports = {
   BATTLEFIELD_SIZE,
   PLAYERS_NUMBER,
@@ -209,8 +231,10 @@ module.exports = {
   SHOT_RESULT_KILLED,
   SHOT_RESULT_MISSED,
   SHOT_RESULT_WOUNDED,
+  canPutShipAtCoords,
   isCoordsValid,
   isCellTaken,
+  getBoard,
   getShipByCoords,
   getShipCellsCoords,
   getAvailableShips,

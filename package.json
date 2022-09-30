@@ -4,7 +4,7 @@
   "description": "Sea Battle game",
   "main": "server/index.js",
   "scripts": {
-    "client-dev": "webpack-dev-server",
+    "client-dev": "webpack-dev-server --host 0.0.0.0",
     "server-dev": "env-cmd -f ./server/config/dev.env nodemon ./server/index.js"
   },
   "author": "Petr Dvukhrechensky",
@@ -17,9 +17,11 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.28",
     "normalize.css": "^8.0.1",
-    "react": "^16.13.1",
+    "react": "^18.2.0",
     "react-addons-shallow-compare": "^15.6.2",
-    "react-dom": "^16.13.1",
+    "react-dnd": "16.0.1",
+    "react-dnd-touch-backend": "^16.0.1",
+    "react-dom": "^18.2.0",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
     "redux": "^4.0.5",
