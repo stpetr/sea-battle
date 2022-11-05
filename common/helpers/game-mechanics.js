@@ -216,6 +216,72 @@ const canPutShipAtCoords = (ships, ship, row, col) => {
   return true
 }
 
+const fitShipToBattlefield = (ship, row, col) => {
+  let fitRow = row
+  let fitCol = col
+
+  if (ship.orientation === SHIP_ORIENTATION_HORIZONTAL) {
+    if (col + ship.length > BATTLEFIELD_SIZE) {
+      fitCol = col - (col + ship.length - BATTLEFIELD_SIZE)
+    }
+  } else {
+    if (row + ship.length > BATTLEFIELD_SIZE) {
+      fitRow = row - (row + ship.length - BATTLEFIELD_SIZE)
+    }
+  }
+
+  return {
+    row: fitRow,
+    col: fitCol,
+  }
+}
+
+const getRandomShips = () => {
+  const ships = []
+  let shipId = 0
+  const board = getBoard()
+  const availableShips = getAvailableShips()
+
+  availableShips.forEach((ship) => {
+    for (let i = 0; i < ship.qty; i++) {
+      const possibleCoords = []
+
+      board.map((cols, rowIndex) => {
+        cols.map((cell, colIndex) => {
+          [SHIP_ORIENTATION_HORIZONTAL, SHIP_ORIENTATION_VERTICAL].map((orientation) => {
+            const orientedShip = { ...ship, orientation }
+            const { row, col } = fitShipToBattlefield(orientedShip, rowIndex, colIndex)
+
+            if (canPutShipAtCoords(ships, orientedShip, row, col)) {
+              possibleCoords.push({
+                row, col, orientation
+              })
+            }
+          })
+        })
+      })
+
+      if (possibleCoords.length) {
+        const randomCoordsIndex = Math.floor(Math.random() * possibleCoords.length)
+        const { row, col, orientation } = possibleCoords[randomCoordsIndex]
+        ships.push({
+          ...ship,
+          id: ++shipId,
+          row,
+          col,
+          orientation,
+        })
+      } else {
+        // @todo throw an error to show user that something went wrong
+        console.error('No possible coords for ship:', ship)
+      }
+    }
+  })
+
+  // @todo it would be nice to double check all ships after the generation process
+  return ships
+}
+
 module.exports = {
   BATTLEFIELD_SIZE,
   PLAYERS_NUMBER,
@@ -240,4 +306,6 @@ module.exports = {
   getAvailableShips,
   validateShips,
   putShipsOnBoard,
+  fitShipToBattlefield,
+  getRandomShips,
 }

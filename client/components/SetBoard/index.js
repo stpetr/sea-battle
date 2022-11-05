@@ -5,12 +5,13 @@ import { AvailableShip } from './AvailableShip'
 import { BoardCell } from './BoardCell'
 import { Ship } from './Ship'
 import {
-  BATTLEFIELD_SIZE,
   SHIP_ORIENTATION_HORIZONTAL,
   SHIP_ORIENTATION_VERTICAL,
   canPutShipAtCoords,
   getBoard,
   getShipByCoords,
+  getRandomShips,
+  fitShipToBattlefield,
 } from '../../../common/helpers/game-mechanics'
 
 const board = getBoard()
@@ -29,26 +30,6 @@ export const SetBoard = ({ game, setShips: saveShips }) => {
   const availableShipsQty = useMemo(() => {
     return availableShips.reduce((accumulator, { qty }) => accumulator + qty, 0)
   }, [availableShips])
-
-  const fitShipToBattlefield = (ship, row, col) => {
-    let fitRow = row,
-      fitCol = col
-
-    if (ship.orientation === SHIP_ORIENTATION_HORIZONTAL) {
-      if (col + ship.length > BATTLEFIELD_SIZE) {
-        fitCol = col - (col + ship.length - BATTLEFIELD_SIZE)
-      }
-    } else {
-      if (row + ship.length > BATTLEFIELD_SIZE) {
-        fitRow = row - (row + ship.length - BATTLEFIELD_SIZE)
-      }
-    }
-
-    return {
-      row: fitRow,
-      col: fitCol,
-    }
-  }
 
   const toggleShipOrientation = (ship) => {
     const orientation = (ship.orientation === SHIP_ORIENTATION_HORIZONTAL) ?
@@ -164,6 +145,11 @@ export const SetBoard = ({ game, setShips: saveShips }) => {
     }
   }
 
+  const onRandomizeShips = () => {
+    setAvailableShips([])
+    setShips(getRandomShips())
+  }
+
   return (
     <div className="set-board-wrap">
       <h2>Place you ships on the battlefield</h2>
@@ -218,12 +204,19 @@ export const SetBoard = ({ game, setShips: saveShips }) => {
           )}
         </div>
       </DndProvider>
-      <div>
+      <div className="buttons">
         <button
           className="btn btn-main"
           disabled={availableShipsQty > 0}
           onClick={() => saveShips(ships)}
-        >Save
+        >
+          Save
+        </button>
+        <button
+          className="btn btn-white"
+          onClick={onRandomizeShips}
+        >
+          Set randomly
         </button>
       </div>
     </div>
