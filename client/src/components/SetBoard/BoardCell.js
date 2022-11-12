@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDrop } from 'react-dnd'
-import { getShipCellsCoords } from '../../../common/helpers/game-mechanics'
+import { getShipCellsCoords } from '@packages/game-mechanics'
 
 export const BoardCell = ({ children, row, col, draggedShip, handleShipDragOver, handleShipDrop }) => {
   const [{ isOver }, dropRef] = useDrop(() => ({

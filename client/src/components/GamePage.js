@@ -14,7 +14,7 @@ import {
 } from '../actions/game'
 import { Link } from 'react-router-dom'
 import { getPrivateGameUrl } from '../helpers/url'
-import { GAME_TYPE_PRIVATE } from '../../common/helpers/game-mechanics'
+import { GAME_TYPE_PRIVATE } from '@packages/game-mechanics'
 
 export class GamePage extends React.Component {
   constructor(props) {

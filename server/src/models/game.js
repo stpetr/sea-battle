@@ -23,7 +23,7 @@ const {
   getShipCellsCoords,
   validateShips,
   isCoordsValid,
-} = require('../../common/helpers/game-mechanics')
+} = require('@packages/game-mechanics')
 
 const MODEL_NAME = 'Game'
 

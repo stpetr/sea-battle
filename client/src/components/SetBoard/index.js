@@ -12,7 +12,7 @@ import {
   getShipByCoords,
   getRandomShips,
   fitShipToBattlefield,
-} from '../../../common/helpers/game-mechanics'
+} from '@packages/game-mechanics'
 
 const board = getBoard()
 

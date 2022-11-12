@@ -3,7 +3,7 @@ const {
   SHOT_RESULT_KILLED,
   SHOT_RESULT_MISSED,
   SHOT_RESULT_WOUNDED,
-} = require('../../common/helpers/game-mechanics')
+} = require('@packages/game-mechanics')
 
 const shotSchema = {
   playerId: {
