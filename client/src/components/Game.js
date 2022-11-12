@@ -9,7 +9,7 @@ import {
   GAME_STATUS_PLAY,
   getShipCellsCoords,
   putShipsOnBoard,
-} from '../../common/helpers/game-mechanics'
+} from '@packages/game-mechanics'
 import Board from "./Board";
 
 export class Game extends React.Component {

@@ -1,25 +1,28 @@
 const path = require('path')
-const webpack = require('webpack')
+const { EnvironmentPlugin } = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development'
 
 if (process.env.NODE_ENV === 'test') {
-  require('dotenv').config({ path: '.env.test' })
+  require('dotenv').config({ path: './config/.env.test' })
 } else if (process.env.NODE_ENV === 'development') {
-  require('dotenv').config({ path: '.env.development' })
+  require('dotenv').config({ path: './config/.env.development' })
 }
 
-module.exports = (env, argv) => {
+module.exports = (env) => {
   const isProduction = env === 'production'
 
   return {
-    entry: ['babel-polyfill', './client/app.js'],
+    entry: {
+      app: './src/app.js',
+    },
     output: {
-      path: path.join(__dirname, 'public', 'dist'),
+      path: path.join(__dirname, '../public'),
       filename: 'bundle.js',
     },
-    mode: 'development',
+    mode: process.env.NODE_ENV,
     module: {
       rules: [
         {
@@ -49,21 +52,19 @@ module.exports = (env, argv) => {
       ],
     },
     plugins: [
+      new HtmlWebpackPlugin({
+        template: path.join(__dirname, './src/index.html'),
+      }),
       new MiniCssExtractPlugin({
         filename: 'styles.css',
-        publicPath: path.join(__dirname, 'public', 'dist'),
       }),
-      new webpack.DefinePlugin({
-        'process.env.CLIENT_URL': JSON.stringify(process.env.CLIENT_URL),
-        'process.env.SERVER_URL': JSON.stringify(process.env.SERVER_URL),
-      }),
+      new EnvironmentPlugin(['CLIENT_URL', 'SERVER_URL']),
     ],
     devtool: isProduction ? 'source-map' : 'inline-source-map',
     devServer: {
-      contentBase: path.join(__dirname, 'public'),
+      static: path.join(__dirname, '../public'),
       port: process.env.DEV_SERVER_PORT || 3000,
       historyApiFallback: true,
-      publicPath: '/dist/',
     },
   }
 }

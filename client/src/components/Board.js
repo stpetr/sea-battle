@@ -1,5 +1,5 @@
 import React from 'react'
-import { isCellTaken } from '../../common/helpers/game-mechanics'
+import { isCellTaken } from '@packages/game-mechanics'
 
 export class Board extends React.Component {
   constructor(props) {

@@ -110,3 +110,8 @@ dist
 server/config/*
 !server/config/example.env
 .env.development
+
+# Public files
+public/index.html
+public/bundle.js
+public/styles.css
