@@ -44,6 +44,7 @@ export class GamePage extends React.Component {
     })
 
     sockets.on(`gameOver`, ({ data }) => {
+      this.props.setGameData(data)
       console.log('Game Over', data)
     })
 
