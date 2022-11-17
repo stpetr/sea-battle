@@ -7,7 +7,7 @@ import Loader from './components/Loader'
 import { authenticate, beginAuthenticate } from './actions/auth'
 import sockets from './helpers/sockets'
 
-import 'normalize.css/normalize.css'
+import './styles/bootstrap-theme.scss'
 import './styles/main.less'
 
 const store = configureStore()

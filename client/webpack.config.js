@@ -1,7 +1,6 @@
 const path = require('path')
 const { EnvironmentPlugin } = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development'
 
@@ -31,32 +30,18 @@ module.exports = (env) => {
           exclude: /node_modules/,
         },
         {
-          test: /\.(less|css)$/,
-          use: [
-            {
-              loader: MiniCssExtractPlugin.loader,
-            },
-            {
-              loader: 'css-loader',
-            },
-            {
-              loader: 'less-loader',
-              options: {
-                lessOptions: {
-                  strictMath: true,
-                },
-              },
-            },
-          ],
+          test: /\.less$/i,
+          use: ['style-loader', 'css-loader', 'less-loader'],
+        },
+        {
+          test: /\.scss$/i,
+          use: ['style-loader', 'css-loader', 'sass-loader'],
         },
       ],
     },
     plugins: [
       new HtmlWebpackPlugin({
         template: path.join(__dirname, './src/index.html'),
-      }),
-      new MiniCssExtractPlugin({
-        filename: 'styles.css',
       }),
       new EnvironmentPlugin(['CLIENT_URL', 'SERVER_URL']),
     ],
