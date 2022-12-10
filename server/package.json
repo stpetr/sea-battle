@@ -4,8 +4,8 @@
   "description": "Sea Battle game API",
   "main": "index.js",
   "scripts": {
-    "start": "env-cmd -f ./config/dev.env nodemon ./src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "env-cmd -f ./config/prod.env node ./src/index.js",
+    "start-dev": "env-cmd -f ./config/dev.env nodemon ./src/index.js"
   },
   "author": "Peter Dvukhrechensky",
   "license": "ISC",

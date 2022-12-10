@@ -110,6 +110,9 @@ dist
 server/config/*
 !server/config/example.env
 .env.development
+client/config/*
+!client/config/example.env
+
 ecosystem.config.js
 
 # Public files

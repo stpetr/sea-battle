@@ -1,17 +1,26 @@
 const path = require('path')
 const { EnvironmentPlugin } = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const dotenv = require('dotenv')
 
-process.env.NODE_ENV = process.env.NODE_ENV || 'development'
+const DEFAULT_DEV_SERVER_PORT = 3000
 
-if (process.env.NODE_ENV === 'test') {
-  require('dotenv').config({ path: './config/.env.test' })
-} else if (process.env.NODE_ENV === 'development') {
-  require('dotenv').config({ path: './config/.env.development' })
+const DEV_ENV = 'dev'
+const PROD_ENV = 'prod'
+
+const modes = {
+  [DEV_ENV]: 'development',
+  [PROD_ENV]: 'production',
+  none: 'none',
 }
 
-module.exports = (env) => {
-  const isProduction = env === 'production'
+const ENV = process.env.NODE_ENV || DEV_ENV
+
+dotenv.config({ path: `./config/${ENV}.env` })
+
+module.exports = () => {
+  const isProduction = ENV === PROD_ENV
 
   return {
     entry: {
@@ -21,7 +30,7 @@ module.exports = (env) => {
       path: path.join(__dirname, '../public'),
       filename: 'bundle.js',
     },
-    mode: process.env.NODE_ENV,
+    mode: modes[ENV] || modes.none,
     module: {
       rules: [
         {
@@ -30,12 +39,19 @@ module.exports = (env) => {
           exclude: /node_modules/,
         },
         {
-          test: /\.less$/i,
-          use: ['style-loader', 'css-loader', 'less-loader'],
-        },
-        {
-          test: /\.scss$/i,
-          use: ['style-loader', 'css-loader', 'sass-loader'],
+          test: /\.(less|css)$/,
+          use: [
+            { loader: MiniCssExtractPlugin.loader },
+            { loader: 'css-loader' },
+            {
+              loader: 'less-loader',
+              options: {
+                lessOptions: {
+                  strictMath: true,
+                },
+              },
+            },
+          ],
         },
       ],
     },
@@ -43,12 +59,15 @@ module.exports = (env) => {
       new HtmlWebpackPlugin({
         template: path.join(__dirname, './src/index.html'),
       }),
+      new MiniCssExtractPlugin({
+        filename: 'styles.css',
+      }),
       new EnvironmentPlugin(['CLIENT_URL', 'SERVER_URL']),
     ],
     devtool: isProduction ? 'source-map' : 'inline-source-map',
     devServer: {
       static: path.join(__dirname, '../public'),
-      port: process.env.DEV_SERVER_PORT || 3000,
+      port: process.env.DEV_SERVER_PORT || DEFAULT_DEV_SERVER_PORT,
       historyApiFallback: true,
     },
   }

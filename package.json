@@ -7,6 +7,7 @@
     "client:start": "npm run start -w client",
     "client:build": "npm run build -w client",
     "server:start": "npm run start -w server",
+    "server:start-dev": "npm run start-dev -w server",
     "game-mechanics:build": "npm run build -w common/game-mechanics"
   },
   "author": "Petr Dvukhrechensky",
