@@ -12,7 +12,7 @@ const gameStackRouter = require('./routers/random-game')
 require('./db/mongoose')
 
 const PORT = process.env.PORT
-const publicDirectoryPath = path.join(__dirname, '../public')
+const publicDirectoryPath = path.join(__dirname, '../../public')
 const app = express()
 const httpServer = http.createServer(app)
 const io = socketIo(httpServer)
