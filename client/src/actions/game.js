@@ -8,6 +8,7 @@ export const SET_SHIPS = 'SET_SHIPS'
 export const MAKE_SHOT = 'MAKE_SHOT'
 export const SET_GAME_DATA = 'SET_GAME_DATA'
 export const REQUEST_REVANCHE = 'REQUEST_REVANCHE'
+export const ACCEPT_REVANCHE = 'ACCEPT_REVANCHE'
 export const LEAVE_GAME = 'LEAVE_GAME'
 
 export const fetchPrivateGame = (game) => ({
@@ -46,6 +47,10 @@ export const setGameData = (game) => ({
 
 export const requestRevanche = () => ({
   type: REQUEST_REVANCHE,
+})
+
+export const acceptRevanche = () => ({
+  type: ACCEPT_REVANCHE,
 })
 
 export const leaveGame = () => ({
@@ -101,6 +106,16 @@ export const beginRequestRevanche = (gameId) => (dispatch) => {
 
   return makeApiRequest(`game/${gameId}/request-revanche`, requestOptions).then(() => {
     return dispatch(requestRevanche())
+  })
+}
+
+export const beginAcceptRevanche = (gameId) => (dispatch) => {
+  const requestOptions = {
+    method: 'POST',
+  }
+
+  return makeApiRequest(`game/${gameId}/accept-revanche`, requestOptions).then(() => {
+    return dispatch(acceptRevanche())
   })
 }
 

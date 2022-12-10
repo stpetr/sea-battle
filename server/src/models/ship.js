@@ -31,6 +31,11 @@ const shipSchema = {
     type: Number,
     required: true,
   },
+  status: {
+    type: String,
+    required: true,
+    enum: [SHIP_ORIENTATION_HORIZONTAL, SHIP_ORIENTATION_VERTICAL],
+  },
 }
 
 module.exports = {

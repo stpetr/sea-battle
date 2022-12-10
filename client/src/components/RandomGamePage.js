@@ -11,7 +11,6 @@ export class RandomGamePage extends React.Component {
 
   componentDidMount() {
     sockets.on('randomGameReady', (game) => {
-      console.log('randomGameReady', game)
       this.props.history.push(`/game/${game._id}`)
     })
 

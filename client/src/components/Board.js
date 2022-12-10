@@ -12,8 +12,6 @@ export class Board extends React.Component {
         console.log('Click on cell dummy callback')
       }
     }
-
-    console.log('Board props', props)
   }
 
   getCoordsOfCell(el) {

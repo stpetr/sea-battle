@@ -6,7 +6,9 @@ import {
   SET_SHIPS,
   MAKE_SHOT,
   SET_GAME_DATA,
-  LEAVE_GAME, REQUEST_REVANCHE_REQUEST, REQUEST_REVANCHE,
+  LEAVE_GAME,
+  REQUEST_REVANCHE,
+  ACCEPT_REVANCHE,
 } from '../actions/game'
 
 const defaultState = {
@@ -55,6 +57,11 @@ export default (state = defaultState, { type, game }) => {
         game,
       }
     case REQUEST_REVANCHE:
+      return {
+        ...state,
+        isRevancheLoading: false,
+      }
+    case ACCEPT_REVANCHE:
       return {
         ...state,
         isRevancheLoading: false,

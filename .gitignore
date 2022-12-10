@@ -110,6 +110,7 @@ dist
 server/config/*
 !server/config/example.env
 .env.development
+ecosystem.config.js
 
 # Public files
 public/index.html

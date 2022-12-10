@@ -87,10 +87,16 @@ gameSchema.statics.statuses = {
   GAME_STATUS_FINISHED,
 }
 
-gameSchema.statics.createPrivateGame = (userId) => {
+gameSchema.statics.createPrivateGame = (userId, opponentId = null) => {
+  const players = [userId]
+
+  if (opponentId) {
+    players.push(opponentId)
+  }
+
   const gameData = {
     type: GAME_TYPE_PRIVATE,
-    players: [userId],
+    players,
     status: GAME_STATUS_JOIN,
   }
 

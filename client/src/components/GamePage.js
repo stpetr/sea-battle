@@ -10,11 +10,14 @@ import {
   beginJoinGame,
   beginSetShips,
   beginMakeShot,
-  setGameData, beginRequestRevanche,
+  setGameData,
+  beginRequestRevanche,
+  beginAcceptRevanche,
 } from '../actions/game'
 import { Link } from 'react-router-dom'
 import { getPrivateGameUrl } from '../helpers/url'
 import { GAME_TYPE_PRIVATE } from '@packages/game-mechanics'
+import { ConfirmModal } from './ConfirmModal'
 
 export class GamePage extends React.Component {
   constructor(props) {
@@ -22,6 +25,7 @@ export class GamePage extends React.Component {
 
     this.state = {
       gameId: props.match.params.id,
+      isRevancheRequested: false,
       // isLoading: true,
       // game: {},
     }
@@ -30,7 +34,6 @@ export class GamePage extends React.Component {
   componentDidMount() {
     sockets.on(`opponentJoined`, ({ data }) => {
       this.props.setGameData(data)
-      console.log('Opponent joined in game component!', data)
     })
 
     sockets.on(`makeShot`, ({ data }) => {
@@ -40,55 +43,65 @@ export class GamePage extends React.Component {
 
     sockets.on(`opponentSetShips`, ({ data }) => {
       this.props.setGameData(data)
-      console.log('Opponent set ships!', data)
     })
 
     sockets.on(`gameOver`, ({ data }) => {
       this.props.setGameData(data)
-      console.log('Game Over', data)
+    })
+
+    sockets.on(`requestRevanche`, ({ data }) => {
+      this.setState({
+        isRevancheRequested: true,
+      })
+    })
+
+    sockets.on(`revancheAccepted`, ({ data }) => {
+      this.props.history.push(`/game/${data._id}`)
     })
 
     this.props.beginFetchPrivateGame(this.state.gameId)
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    // console.log('PG Update Props', this.props)
-    console.log('game', this.props.game)
-  }
-
-  componentWillUnmount() {
-
-  }
-
   joinGame = () => {
     this.props.beginJoinGame(this.state.gameId)
-    // makeApiRequest(`game/${this.state.gameId}/join`, { method: 'POST' }).then((data) => {
-    //     this.setState({ game: data })
-    // })
   }
   setShips = (ships) => {
-    console.log('SET SHIPS', ships)
     this.props.beginSetShips(this.state.gameId, ships)
-    // const requestOptions = {
-    //     method: 'POST',
-    //     body: JSON.stringify(ships)
-    // }
-    // makeApiRequest(`game/${this.state.gameId}/set-ships`, requestOptions).then((data) => {
-    //     this.props.setGameData(data)
-    // })
   }
   makeShot = (row, col) => {
-    console.log('Make shot at', row, col)
-
     this.props.beginMakeShot(this.state.gameId, { row, col })
   }
 
   requestRevanche = () => {
-    console.log('Revanche?')
     this.props.beginRequestRevanche(this.state.gameId)
   }
 
+  acceptRevanche = () => {
+    this.props.beginAcceptRevanche(this.state.gameId)
+    this.setState({
+      isRevancheRequested: false,
+    })
+  }
+
+  rejectRevanche = () => {
+    this.setState({
+      isRevancheRequested: false,
+    })
+  }
+
   render() {
+    if (this.state.isRevancheRequested) {
+      return (
+        <ConfirmModal
+          show={true}
+          title="Revanche?"
+          message="Would you like to play again?"
+          onYes={this.acceptRevanche}
+          onNo={this.rejectRevanche}
+        />
+      )
+    }
+
     if (this.props.game && this.props.game.winner) {
       return (
         <div className="game-over container">
@@ -159,6 +172,7 @@ const mapDispatchToProps = (dispatch) => ({
   beginMakeShot: (gameId, shot) => dispatch(beginMakeShot(gameId, shot)),
   setGameData: (game) => dispatch(setGameData(game)),
   beginRequestRevanche: (gameId) => dispatch(beginRequestRevanche(gameId)),
+  beginAcceptRevanche: (gameId) => dispatch(beginAcceptRevanche(gameId))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(GamePage)

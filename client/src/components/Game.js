@@ -80,6 +80,16 @@ export class Game extends React.Component {
     return shots.filter((shot) => shot.playerId === this.props.game.opponent._id)
   }
 
+  onCellClick(row, col) {
+    const { game, makeShot } = this.props
+
+    if (game.player._id === game.nextMove) {
+      makeShot(row, col)
+    } else {
+      console.log('It is not your turn mf!')
+    }
+  }
+
   render() {
     // console.log('game rendered', game.nextMove, game.player._id)
     const { game } = this.props
@@ -91,7 +101,7 @@ export class Game extends React.Component {
         </div>
         <div className="game__board">
           <p>Opponent Board</p>
-          <Board board={this.state.opponentBoard} onCellClick={this.props.makeShot}/>
+          <Board board={this.state.opponentBoard} onCellClick={this.onCellClick.bind(this)}/>
         </div>
 
         {game.nextMove === game.player._id && (
