@@ -39,19 +39,12 @@ module.exports = () => {
           exclude: /node_modules/,
         },
         {
-          test: /\.(less|css)$/,
-          use: [
-            { loader: MiniCssExtractPlugin.loader },
-            { loader: 'css-loader' },
-            {
-              loader: 'less-loader',
-              options: {
-                lessOptions: {
-                  strictMath: true,
-                },
-              },
-            },
-          ],
+          test: /\.less$/i,
+          use: ['style-loader', 'css-loader', 'less-loader'],
+        },
+        {
+          test: /\.scss$/i,
+          use: ['style-loader', 'css-loader', 'sass-loader'],
         },
       ],
     },
