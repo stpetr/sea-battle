@@ -3,6 +3,9 @@ const mongoose = require('mongoose')
 const {
   SHIP_ORIENTATION_HORIZONTAL,
   SHIP_ORIENTATION_VERTICAL,
+  SHIP_STATUS_OK,
+  SHIP_STATUS_WOUNDED,
+  SHIP_STATUS_KILLED,
 } = require('@packages/game-mechanics')
 
 const shipSchema = {
@@ -34,7 +37,8 @@ const shipSchema = {
   status: {
     type: String,
     required: true,
-    enum: [SHIP_ORIENTATION_HORIZONTAL, SHIP_ORIENTATION_VERTICAL],
+    enum: [SHIP_STATUS_OK, SHIP_STATUS_WOUNDED, SHIP_STATUS_KILLED],
+    default: SHIP_STATUS_OK,
   },
 }
 

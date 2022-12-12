@@ -9,6 +9,7 @@ import {
   GAME_STATUS_PLAY,
   getShipCellsCoords,
   putShipsOnBoard,
+  getShipByCoords,
 } from '@packages/game-mechanics'
 import Board from "./Board";
 
@@ -27,13 +28,13 @@ export class Game extends React.Component {
   componentDidMount() {
     console.log('did mount, game:', this.props.game)
     this.initBoard(`playerBoard`, this.props.game.ships, this.getOpponentShots())
-    this.initBoard(`opponentBoard`, [], this.getShots())
+    this.initBoard(`opponentBoard`, this.props.game.opponentKilledShips, this.getShots())
   }
 
   componentWillReceiveProps(nextProps) {
     // console.log('props will change', nextProps)
-    this.initBoard(`playerBoard`, this.props.game.ships, this.getOpponentShots(nextProps.game.shots))
-    this.initBoard(`opponentBoard`, [], this.getShots(nextProps.game.shots))
+    this.initBoard(`playerBoard`, nextProps.game.ships, this.getOpponentShots(nextProps.game.shots))
+    this.initBoard(`opponentBoard`, nextProps.game.opponentKilledShips, this.getShots(nextProps.game.shots))
   }
 
   componentWillUnmount() {
@@ -60,7 +61,8 @@ export class Game extends React.Component {
     })
 
     shots.forEach((shot) => {
-      board[shot.row][shot.col] = shot.result
+      const ship = getShipByCoords(ships, shot.row, shot.col)
+      board[shot.row][shot.col] = ship ? ship.status : shot.result
     })
 
     this.setState({ [stateProp]: board })
