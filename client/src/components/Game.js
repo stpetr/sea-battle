@@ -1,17 +1,17 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
-import Ship from './Ship'
+
 import {
   SHIP,
+  SHIP_STATUS_KILLED,
   SHOT_RESULT_MISSED,
-  SHOT_RESULT_WOUNDED,
-  SHOT_RESULT_KILLED,
-  GAME_STATUS_PLAY,
   getShipCellsCoords,
-  putShipsOnBoard,
   getShipByCoords,
+  getCellsAround,
 } from '@packages/game-mechanics'
-import Board from "./Board";
+
+import Board from './Board'
 
 export class Game extends React.Component {
   constructor(props) {
@@ -26,7 +26,7 @@ export class Game extends React.Component {
   }
 
   componentDidMount() {
-    console.log('did mount, game:', this.props.game)
+    // console.log('did mount, game:', this.props.game)
     this.initBoard(`playerBoard`, this.props.game.ships, this.getOpponentShots())
     this.initBoard(`opponentBoard`, this.props.game.opponentKilledShips, this.getShots())
   }
@@ -37,10 +37,7 @@ export class Game extends React.Component {
     this.initBoard(`opponentBoard`, nextProps.game.opponentKilledShips, this.getShots(nextProps.game.shots))
   }
 
-  componentWillUnmount() {
-
-  }
-
+  // @todo refactor
   initBoard = (stateProp, ships = [], shots = []) => {
     const board = []
 
@@ -64,6 +61,22 @@ export class Game extends React.Component {
       const ship = getShipByCoords(ships, shot.row, shot.col)
       board[shot.row][shot.col] = ship ? ship.status : shot.result
     })
+
+    // Mark cells around killed ships
+    if (stateProp === 'opponentBoard') {
+      ships.filter(({status}) => status === SHIP_STATUS_KILLED).forEach((ship) => {
+        const shipCellsCoords = getShipCellsCoords(ship)
+        shipCellsCoords.forEach(({row, col}) => {
+          const cellsAround = getCellsAround(row, col)
+          cellsAround.forEach((el) => {
+            const shipByCoords = getShipByCoords(ships, el.row, el.col)
+            if (!shipByCoords) {
+              board[el.row][el.col] = SHOT_RESULT_MISSED
+            }
+          })
+        })
+      })
+    }
 
     this.setState({ [stateProp]: board })
   }
@@ -93,7 +106,6 @@ export class Game extends React.Component {
   }
 
   render() {
-    // console.log('game rendered', game.nextMove, game.player._id)
     const { game } = this.props
     return (
       <div className="game">
