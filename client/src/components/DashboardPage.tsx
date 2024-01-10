@@ -1,19 +1,21 @@
 import React, { useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { beginCreatePrivateGame } from '../actions/game'
-import { getPrivateGameUrl } from '../helpers/url'
-import { copy } from '../helpers/clipboard'
+
+import { beginCreatePrivateGame } from 'actions/game'
+import { getPrivateGameUrl } from 'helpers/url'
+import { copy } from 'helpers/clipboard'
 
 export const DashboardPage = () => {
   const dispatch = useDispatch()
-  const isLoading = useSelector(state => state.game.isLoading)
+  const isLoading = useSelector((state: any) => state.game.isLoading)
   const [createdGame, setCreatedGame] = useState(null)
   const [isLinkCopied, setIsLinkCopied] = useState(false)
   const privateGameLink = useMemo(() => createdGame ? getPrivateGameUrl(createdGame._id) : null, [createdGame])
   const privateGameLinkLocal = useMemo(() => createdGame ? getPrivateGameUrl(createdGame._id, true) : null, [createdGame])
 
   const createPrivateGame = async () => {
+    // @ts-ignore
     const { game } = await dispatch(beginCreatePrivateGame())
     if (game) {
       setCreatedGame(game)

@@ -9,7 +9,7 @@ import {
   LEAVE_GAME,
   REQUEST_REVANCHE,
   ACCEPT_REVANCHE,
-} from '../actions/game'
+} from 'actions/game'
 
 const defaultState = {
   game: null,

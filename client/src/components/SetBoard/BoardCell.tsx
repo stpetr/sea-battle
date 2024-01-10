@@ -1,15 +1,26 @@
 import React from 'react'
 import { useDrop } from 'react-dnd'
 import { getShipCellsCoords } from '@packages/game-mechanics'
+import { AvailableShip } from 'models/ship'
 
-export const BoardCell = ({ children, row, col, draggedShip, handleShipDragOver, handleShipDrop }) => {
+type BoardCellProps = {
+  row: number
+  col: number
+  draggedShip: AvailableShip
+  onShipDragOver: (row: number, col: number) => void
+  onShipDrop: (ship: AvailableShip, row: number, col: number) => void
+  children: React.ReactNode
+}
+
+export const BoardCell: React.FC<BoardCellProps> = (props) => {
+  const { children, row, col, draggedShip, onShipDragOver, onShipDrop } = props
   const [{ isOver }, dropRef] = useDrop(() => ({
     accept: 'SHIP',
-    drop: (ship) => {
-      handleShipDrop(ship, row, col)
+    drop: (ship: AvailableShip) => {
+      onShipDrop(ship, row, col)
     },
     hover: () => {
-      handleShipDragOver(row, col)
+      onShipDragOver(row, col)
     },
     collect: () => {
       const state = {

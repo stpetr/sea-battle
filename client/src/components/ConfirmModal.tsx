@@ -2,7 +2,19 @@ import React from 'react'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 
-export const ConfirmModal = ({ message, title = '', yesButtonText = 'Yes', noButtonText = 'No', onYes, onNo, show }) => {
+type ConfirmModalProps = {
+  message: string
+  title?: string
+  yesButtonText?: string
+  noButtonText?: string
+  onYes: () => void
+  onNo: () => void
+  show: boolean
+}
+
+export const ConfirmModal: React.FC<ConfirmModalProps> = (props) => {
+  const { message, title = '', yesButtonText = 'Yes', noButtonText = 'No', onYes, onNo, show } = props
+
   return (
     <Modal
       show={show}

@@ -2,10 +2,10 @@ import React, { useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { beginLogout } from '../actions/auth'
+import { beginLogout } from 'actions/auth'
 
 export const Header = () => {
-  const auth = useSelector((state) => state.auth)
+  const auth = useSelector((state: any) => state.auth)
   const dispatch = useDispatch()
 
   const userInitials = useMemo(() => auth.user.name.split(' ').map(name => name[0]), [auth.user.name])

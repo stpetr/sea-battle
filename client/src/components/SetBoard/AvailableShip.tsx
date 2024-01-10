@@ -1,26 +1,35 @@
 import React from 'react'
 import { useDrag } from 'react-dnd'
 
+import { AvailableShip as AvailableShipType } from 'models/ship'
+
 const getShipCells = (shipData) => {
   return new Array(shipData.length).fill(null);
 }
 
-export const AvailableShip = ({ ship, handleClick, handleDragStart, handleDragEnd }) => {
+type AvailableShipProps = {
+  ship: AvailableShipType,
+  onClick: (ship: AvailableShipType) => void
+  onDragStart: (ship: AvailableShipType) => void
+  onDragEnd: () => void
+}
+
+export const AvailableShip: React.FC<AvailableShipProps> = ({ ship, onClick, onDragStart, onDragEnd }) => {
   const [, dragRef] = useDrag(() => ({
     type: 'SHIP',
     item: () => {
-      handleDragStart(ship)
+      onDragStart(ship)
       return ship
     },
     end: () => {
-      handleDragEnd()
+      onDragEnd()
     },
   }), [ship])
 
   return (
     <div className={`ship -${ship.orientation}`}
       ref={dragRef}
-      onClick={() => handleClick(ship)}
+      onClick={() => onClick(ship)}
     >
       {
         getShipCells(ship).map((cell, cellIndex) => (

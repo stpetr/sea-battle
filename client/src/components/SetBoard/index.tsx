@@ -14,13 +14,16 @@ import {
   fitShipToBattlefield,
 } from '@packages/game-mechanics'
 
+import { AvailableShip as AvailableShipType } from 'models/ship'
+
 const board = getBoard()
+
 
 export const SetBoard = ({ game, setShips: saveShips }) => {
   const [shipId, setShipId] = useState(1)
-  const [ships, setShips] = useState([])
-  const [draggedShip, setDraggedShip] = useState([])
-  const [availableShips, setAvailableShips] = useState(game.availableShips)
+  const [ships, setShips] = useState<AvailableShipType[]>([])
+  const [draggedShip, setDraggedShip] = useState<AvailableShipType | null>(null)
+  const [availableShips, setAvailableShips] = useState<AvailableShipType[]>(game.availableShips)
 
   const getNewShipId = () => {
     setShipId((prevState) => prevState + 1)
@@ -72,15 +75,15 @@ export const SetBoard = ({ game, setShips: saveShips }) => {
     }
   }
 
-  const onShipDragStart = (ship) => {
+  const handleShipDragStart = (ship) => {
     setDraggedShip(ship)
   }
 
-  const onShipDragEnd = () => {
+  const handleShipDragEnd = () => {
     setDraggedShip(null)
   }
 
-  const onShipDragOver = (row, col) => {
+  const handleShipDragOver = (row, col) => {
     if (row !== draggedShip.row || col !== draggedShip.col) {
       setDraggedShip((prevState) => {
         if (prevState) {
@@ -96,7 +99,7 @@ export const SetBoard = ({ game, setShips: saveShips }) => {
     }
   }
 
-  const onShipDrop = (ship, targetRow, targetCol) => {
+  const handleShipDrop = (ship, targetRow, targetCol) => {
     if (!draggedShip) {
       return
     }
@@ -145,14 +148,14 @@ export const SetBoard = ({ game, setShips: saveShips }) => {
     }
   }
 
-  const onRandomizeShips = () => {
+  const handleShipsRandomize = () => {
     setAvailableShips([])
     setShips(getRandomShips())
   }
 
   return (
     <div className="set-board-wrap">
-      <h2>Place you ships on the battlefield</h2>
+      <h2>Place your ships on the battlefield</h2>
       <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
         <div className="set-board">
           <div className="board-wrap">
@@ -162,19 +165,18 @@ export const SetBoard = ({ game, setShips: saveShips }) => {
                   {cols.map((cell, colIndex) => (
                     <div key={`row-${rowIndex}x-col-${colIndex}`} className="cell">
                       <BoardCell
-                        ship={getShipByCoords(ships, rowIndex, colIndex)}
                         row={rowIndex}
                         col={colIndex}
                         draggedShip={draggedShip}
-                        handleShipDragOver={onShipDragOver}
-                        handleShipDrop={onShipDrop}
+                        onShipDragOver={handleShipDragOver}
+                        onShipDrop={handleShipDrop}
                       >
                         {getShipByCoords(ships, rowIndex, colIndex) ? (
                           <Ship
                             ship={getShipByCoords(ships, rowIndex, colIndex)}
-                            handleClick={toggleShipOrientation}
-                            handleDragStart={onShipDragStart}
-                            handleDragEnd={onShipDragEnd}
+                            onClick={toggleShipOrientation}
+                            onDragStart={handleShipDragStart}
+                            onDragEnd={handleShipDragEnd}
                           />
                           ) : null
                         }
@@ -193,9 +195,9 @@ export const SetBoard = ({ game, setShips: saveShips }) => {
                     ship.qty > 0 &&
                     <AvailableShip key={`ship-${ship.width}-${ship.length}`}
                       ship={ship}
-                      handleClick={toggleShipOrientation}
-                      handleDragStart={onShipDragStart}
-                      handleDragEnd={onShipDragEnd}
+                      onClick={toggleShipOrientation}
+                      onDragStart={handleShipDragStart}
+                      onDragEnd={handleShipDragEnd}
                     />
                   )
                 })
@@ -214,7 +216,7 @@ export const SetBoard = ({ game, setShips: saveShips }) => {
         </button>
         <button
           className="btn btn-white"
-          onClick={onRandomizeShips}
+          onClick={handleShipsRandomize}
         >
           Set randomly
         </button>
