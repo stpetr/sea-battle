@@ -1,24 +1,20 @@
 import React from 'react'
-import ReactDom from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
+
+import { authenticate, beginAuthenticate } from 'actions/auth'
 import configureStore from './store/configureStore'
 import AppRouter from './routers/AppRouter'
 import Loader from './components/Loader'
-import { authenticate, beginAuthenticate } from './actions/auth'
 import sockets from './helpers/sockets'
 
 import './styles/bootstrap-theme.scss'
 import './styles/main.less'
 
 const store = configureStore()
-const rootElement = document.getElementById('app')
-const tpl = (
-  <Provider store={store}>
-    <AppRouter/>
-  </Provider>
-)
+const appRoot = createRoot(document.getElementById('app'))
 
-ReactDom.render(<Loader/>, rootElement)
+appRoot.render(<Loader/>)
 
 // Check if user has valid token in local storage
 store.dispatch(beginAuthenticate()).then((data) => {
@@ -27,5 +23,9 @@ store.dispatch(beginAuthenticate()).then((data) => {
     sockets.connect()
   }
 
-  ReactDom.render(tpl, rootElement)
+  appRoot.render(
+    <Provider store={store}>
+      <AppRouter/>
+    </Provider>
+  )
 })
