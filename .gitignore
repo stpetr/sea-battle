@@ -10,8 +10,7 @@ node_modules/
 .idea
 
 # App files
-server/config/*
-!server/config/example.env
+server/config/.env
 client/dist
 client/config/.env
 !client/config/example.env
