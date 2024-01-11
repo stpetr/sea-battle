@@ -5,7 +5,7 @@
   "main": "app.tsx",
   "scripts": {
     "start": "webpack serve --host 0.0.0.0",
-    "build": "node --max-old-space-size=4096 ../node_modules/webpack/bin/webpack.js --env MODE=production"
+    "build": "webpack --env MODE=production"
   },
   "author": "",
   "license": "ISC",
