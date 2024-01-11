@@ -1,4 +1,4 @@
-import { DefinePlugin, ProgressPlugin, WebpackPluginInstance } from 'webpack'
+import { EnvironmentPlugin, ProgressPlugin, WebpackPluginInstance } from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 
@@ -15,8 +15,6 @@ export const buildPlugins = ({paths}: BuildOptions): WebpackPluginInstance[] => 
       filename: 'css/[name].[contenthash:8].css',
       chunkFilename: 'css/[name].[contenthash:8].css',
     }),
-    new DefinePlugin({
-      'process.env': JSON.stringify(process.env),
-    }),
+    new EnvironmentPlugin(['CLIENT_URL', 'SERVER_URL']),
   ]
 }
