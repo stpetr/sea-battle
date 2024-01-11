@@ -26,5 +26,8 @@ export const buildWebpackConfig = (options: BuildOptions): webpack.Configuration
     resolve: buildResolvers(options),
     devtool: isDevMode ? 'inline-source-map' : undefined,
     devServer: isDevMode ? buildDevServer(options) : undefined,
+    optimization: {
+      minimize: false,
+    },
   }
 }
