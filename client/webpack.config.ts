@@ -5,6 +5,8 @@ import { buildWebpackConfig } from './config/build/build-webpack-config'
 
 import { BuildEnv, BuildMode, BuildPaths } from './config/build/types'
 
+dotenv.config({ path: './config/.env' })
+
 export default (env: BuildEnv) => {
   const paths: BuildPaths = {
     entry: path.resolve(__dirname, 'src/app.tsx'),
@@ -13,11 +15,9 @@ export default (env: BuildEnv) => {
     favicon: path.resolve(__dirname, 'src/assets/images/favicon.ico'),
     src: path.resolve(__dirname, 'src'),
   }
-  const mode: BuildMode = env.mode ?? 'development'
-  const port = env.port ?? 3010
+  const mode: BuildMode = env.MODE ?? 'development'
+  const port = env.PORT ?? 3010
   const isDevMode = mode === 'development'
-
-  dotenv.config({ path: './config/.env' })
 
   return buildWebpackConfig({
     mode,

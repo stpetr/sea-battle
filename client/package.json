@@ -5,7 +5,7 @@
   "main": "app.tsx",
   "scripts": {
     "start": "webpack serve --host 0.0.0.0",
-    "build": "NODE_ENV=prod webpack"
+    "build": "webpack --env MODE=production"
   },
   "author": "",
   "license": "ISC",
