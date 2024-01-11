@@ -15,6 +15,7 @@ client/dist
 client/config/.env
 !client/config/example.env
 common/game-mechanics/dist
+public
 tmp
 
 ecosystem.config.js

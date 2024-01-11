@@ -8,7 +8,7 @@ import { BuildEnv, BuildMode, BuildPaths } from './config/build/types'
 export default (env: BuildEnv) => {
   const paths: BuildPaths = {
     entry: path.resolve(__dirname, 'src/app.tsx'),
-    build: path.resolve(__dirname, 'dist'),
+    build: path.resolve(__dirname, '../public'),
     html: path.resolve(__dirname, 'src/index.html'),
     favicon: path.resolve(__dirname, 'src/assets/images/favicon.ico'),
     src: path.resolve(__dirname, 'src'),
