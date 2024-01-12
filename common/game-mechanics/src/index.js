@@ -10,6 +10,9 @@ const GAME_STATUS_FINISHED = 'finished'
 
 const SHIP_ORIENTATION_HORIZONTAL = 'horizontal'
 const SHIP_ORIENTATION_VERTICAL = 'vertical'
+const SHIP_STATUS_OK = 'ok'
+const SHIP_STATUS_WOUNDED = 'wounded'
+const SHIP_STATUS_KILLED = 'killed'
 const SHOT_RESULT_MISSED = 'missed'
 const SHOT_RESULT_WOUNDED = 'wounded'
 const SHOT_RESULT_KILLED = 'killed'
@@ -84,37 +87,44 @@ const getShipCellsCoords = (ship) => {
   return coords
 }
 
-const isCellTaken = (ships, row, col, excludeShip = null) => {
-  // Need to check the given cell and all cells around it
-  const coordsToCheck = [
+// Returns valid cells coords around ship
+const getCellsAround = (row, col) => {
+  const coordsDelta = [
     [-1, -1],
     [-1, 0],
     [-1, 1],
     [0, -1],
-    [0, 0],
     [0, 1],
     [1, -1],
     [1, 0],
     [1, 1],
   ]
+  const cellsCoordsAroundShip = []
 
-  for (let i = 0; i < coordsToCheck.length; i++) {
-    const checkRow = row + coordsToCheck[i][0],
-      checkCol = col + coordsToCheck[i][1],
-      shipByCoords = getShipByCoords(ships, checkRow, checkCol)
+  coordsDelta.forEach(([deltaRow, deltaCol]) => {
+    const cellRow = row + deltaRow,
+      cellCol = col + deltaCol
 
-    if (!isCoordsValid(checkRow, checkCol)) {
-      continue
+    if (isCoordsValid(cellRow, cellCol)) {
+      cellsCoordsAroundShip.push({row: cellRow, col: cellCol})
     }
+  })
 
-    if (shipByCoords) {
-      if (!excludeShip || excludeShip.id !== shipByCoords.id) {
-        return true
-      }
-    }
+  return cellsCoordsAroundShip
+}
+
+const isCellTaken = (ships, row, col, excludeShip = null) => {
+  if (!isCoordsValid(row, col)) {
+    return false
   }
 
-  return false
+  // Need to check the given cell and all cells around it
+  const cellsToCheck = getCellsAround(row, col);
+  cellsToCheck.push({row, col})
+  return cellsToCheck.some((el) => {
+    const shipByCoords = getShipByCoords(ships, el.row, el.col)
+    return shipByCoords && (!excludeShip || excludeShip.id !== shipByCoords.id)
+  })
 }
 
 const validateShipsContent = (ships) => {
@@ -292,6 +302,9 @@ module.exports = {
   GAME_STATUS_PLAY,
   GAME_STATUS_FINISHED,
   SHIP,
+  SHIP_STATUS_OK,
+  SHIP_STATUS_WOUNDED,
+  SHIP_STATUS_KILLED,
   SHIP_ORIENTATION_HORIZONTAL,
   SHIP_ORIENTATION_VERTICAL,
   SHOT_RESULT_KILLED,
@@ -304,6 +317,7 @@ module.exports = {
   getShipByCoords,
   getShipCellsCoords,
   getAvailableShips,
+  getCellsAround,
   validateShips,
   putShipsOnBoard,
   fitShipToBattlefield,

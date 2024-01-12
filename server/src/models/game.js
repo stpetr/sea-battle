@@ -15,6 +15,8 @@ const {
   GAME_STATUS_FINISHED,
   SHIP_ORIENTATION_HORIZONTAL,
   SHIP_ORIENTATION_VERTICAL,
+  SHIP_STATUS_KILLED,
+  SHIP_STATUS_WOUNDED,
   SHOT_RESULT_KILLED,
   SHOT_RESULT_MISSED,
   SHOT_RESULT_WOUNDED,
@@ -87,10 +89,16 @@ gameSchema.statics.statuses = {
   GAME_STATUS_FINISHED,
 }
 
-gameSchema.statics.createPrivateGame = (userId) => {
+gameSchema.statics.createPrivateGame = (userId, opponentId = null) => {
+  const players = [userId]
+
+  if (opponentId) {
+    players.push(opponentId)
+  }
+
   const gameData = {
     type: GAME_TYPE_PRIVATE,
-    players: [userId],
+    players,
     status: GAME_STATUS_JOIN,
   }
 
@@ -136,9 +144,11 @@ gameSchema.statics.prepareGameData = async (game, user) => {
   }
 
   const playerShips = game.getPlayerShips(user._id)
+  const opponentKilledShips = game.getOpponentShips(user._id).filter(({ status }) => status === SHIP_STATUS_KILLED)
   if (playerShips.length) {
     gameData.ships = playerShips
     gameData.status = GAME_STATUS_PLAY
+    gameData.opponentKilledShips = opponentKilledShips
     // if (game.getOpponentShips(user._id).length) {
     //     gameData.status = GAME_STATUS_PLAY
     // } else {
@@ -274,19 +284,27 @@ gameSchema.methods.makeShot = async function (playerId, row, col) {
   }
 
   const hasSameCoordsShot = this.getPlayerShots(playerId).some(({
-                                                                  row: shotRow,
-                                                                  col: shotCol,
-                                                                }) => shotRow === row && shotCol === col)
+    row: shotRow,
+    col: shotCol,
+  }) => shotRow === row && shotCol === col)
+
   if (hasSameCoordsShot) {
     console.log('Cannot shoot at the same cell twice')
     return false
   }
 
-  const shipHit = getShipByCoords(this.getOpponentShips(playerId), row, col)
+  const shipByCoords = getShipByCoords(this.getOpponentShips(playerId), row, col)
   let result = SHOT_RESULT_MISSED
-  if (shipHit) {
-    const wasShipKilled = this.isShipKilled(shipHit, [...this.getPlayerShots(playerId), { row, col }])
-    result = wasShipKilled ? SHOT_RESULT_KILLED : SHOT_RESULT_WOUNDED
+  if (shipByCoords) {
+    const wasShipKilled = this.isShipKilled(shipByCoords, [...this.getPlayerShots(playerId), { row, col }])
+
+    if (wasShipKilled) {
+      shipByCoords.status = SHIP_STATUS_KILLED
+      result = SHOT_RESULT_KILLED
+    } else {
+      shipByCoords.status = SHIP_STATUS_WOUNDED
+      result = SHOT_RESULT_WOUNDED
+    }
   }
 
   this.shots.push({
@@ -310,7 +328,6 @@ gameSchema.methods.makeShot = async function (playerId, row, col) {
 
   if (this.isPlayerWon(playerId)) {
     console.log('Player won')
-
   }
 
   return this.save()

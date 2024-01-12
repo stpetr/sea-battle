@@ -1,4 +1,5 @@
 const express = require('express')
+const { GAME_STATUS_FINISHED } = require('@packages/game-mechanics')
 const auth = require('../middleware/auth')
 // const User = require('../models/user')
 const Game = require('../models/game')
@@ -118,14 +119,53 @@ router.post('/api/game/:id/request-revanche', auth, async (req, res) => {
     return res.status(404).send()
   }
 
-  if (game.status !== Game.GAME_STATUS_FINISHED) {
+  if (game.status !== GAME_STATUS_FINISHED) {
     return res.status(400).send()
   }
 
   const gameData = await Game.prepareGameData(game, req.user)
-  sockets.notifyUser(gameData.opponent._id, 'requestRevanche', Date.now())
 
-  res.send()
+  console.log('GDATA', gameData.opponent._id)
+
+  sockets.notifyUser(gameData.opponent._id, 'requestRevanche', {
+    data: {
+      gameId: game._id
+    },
+    message: 'Revanche?',
+  })
+})
+
+router.post('/api/game/:id/accept-revanche', auth, async (req, res) => {
+  const currentGame = await Game.findById(req.params.id)
+
+  if (!currentGame) {
+    return res.status(404).send()
+  }
+
+  if (currentGame.status !== GAME_STATUS_FINISHED) {
+    return res.status(400).send()
+  }
+
+  const currentGameData = await Game.prepareGameData(currentGame, req.user)
+  try {
+    const revancheGame = Game.createPrivateGame(req.user._id, currentGameData.opponent._id)
+    await revancheGame.save()
+
+    const revancheGameData = await Game.prepareGameData(revancheGame, req.user)
+    res.send(revancheGameData)
+    console.log('Notifying about accepted revanche', Object.keys(currentGameData))
+    sockets.notifyUser(currentGameData.opponent._id, 'revancheAccepted', {
+      data: revancheGameData,
+      message: 'Let us play again',
+    })
+    sockets.notifyUser(currentGameData.player._id, 'revancheAccepted', {
+      data: revancheGameData,
+      message: 'Let us play again',
+    })
+  } catch (e) {
+    console.log('Failed to create game for revanche', e)
+    res.status(400).send()
+  }
 })
 
 router.post('/api/game/:id/leave', auth, async (req, res) => {

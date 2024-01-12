@@ -8,7 +8,6 @@ const defaultState = []
 export default (state = defaultState, action) => {
   switch (action.type) {
     case FETCH_GAMES:
-      console.log('FETCH GAMES', action)
       if (Array.isArray(action.games)) {
         return [
           ...state,
