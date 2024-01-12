@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import bannerImage from 'assets/images/battleship.png'
+import bannerImage from 'assets/images/battleship.jpg'
 
 export const HomePage = () => {
   return (
